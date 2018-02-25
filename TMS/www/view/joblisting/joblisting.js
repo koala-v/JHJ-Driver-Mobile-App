@@ -268,6 +268,12 @@ app.controller('JoblistingDetailCtrl', ['ENV', '$scope', '$state', '$ionicAction
             text: 'Reassign Driver',
             value: 'ReassignDriver'
         }, {
+            text: 'Receiver not at home',
+            value: 'ReceiverNotAtHome'
+        },{
+            text: 'Receiver not answer call',
+            value: 'ReceiveNotAnswerCall'
+        }  , {
             text: 'Remark',
             value: 'Remark'
         }];

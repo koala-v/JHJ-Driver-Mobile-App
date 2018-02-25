@@ -3,7 +3,6 @@ var appConfig = angular.module('TMS.config', []);
 appConfig.constant('ENV', {
     website: 'www.sysfreight.net/app/tms/JHJ',
     api: 'www.sysfreight.net/apis/tms/JHJ',
-    // api: 'http://localhost:62787/',
     // api:  'localhost:9249',
     reset: {
         'website': 'www.sysfreight.net/app/tms/JHJ',
@@ -32,5 +31,5 @@ appConfig.constant('ENV', {
     updateFile: 'update.json',
     rootPath: 'JHJTMS',
     configFile: 'config.txt',
-    version: '1.0.1.0',
+    version: '1.0.1.1',
 });

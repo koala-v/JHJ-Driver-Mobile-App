@@ -57,11 +57,11 @@ namespace WebApi.ServiceModel.TMS
                         strRefreshAemp1 = " And TrxNo =0 ";
                         strRefreshAido1 = " And DeliveryOrderNo =0 ";
                     }                   
-                    string strAemp1Where = "Where CONVERT(varchar(20),PickupDateTime ,112)=(select convert(varchar(10),getdate(),112))  and Driver1Code ='" + request.DriverCode +"' " +strRefreshAemp1 ;
-                    string strAido1Where = "Where CONVERT(varchar(20),DeliveryDate ,112)=(select convert(varchar(10),getdate(),112))  and DriverCode ='" + request.DriverCode+"'"+ strRefreshAido1;
-                    string strSido1Where = "Where CONVERT(varchar(20),CollectDateTime ,112)=(select convert(varchar(10),getdate(),112))  and DriverCode ='" + request.DriverCode + "'" + strRefreshSido1;    
+                    string strAemp1Where = "Where ( CONVERT(varchar(20),PickupDateTime ,112)=(select convert(varchar(10),getdate(),112)) or PickupDateTime is null or PickupDateTime='')  and Driver1Code ='" + request.DriverCode +"' " +strRefreshAemp1 ;
+                    string strAido1Where = "Where ( CONVERT(varchar(20),DeliveryDate ,112)=(select convert(varchar(10),getdate(),112)) or DeliveryDate is null or DeliveryDate='')  and DriverCode ='" + request.DriverCode+"'"+ strRefreshAido1;
+                    string strSido1Where = "Where ( CONVERT(varchar(20),CollectDateTime ,112)=(select convert(varchar(10),getdate(),112)) or CollectDateTime is null or CollectDateTime='' )  and DriverCode ='" + request.DriverCode + "'" + strRefreshSido1;    
                     
-                    strSql = "  select cast(TrxNo as varchar(20)) as 'Key','Aemp1' as TableName, 'Collect' as DCFlag ,'' as UpdatedFlag ,isnull((cast(pcs as nvarchar(20))+' ' +ISNULL(UomCode,'')),'') as PcsUom ," +
+                    strSql = "Select * From(  select cast(TrxNo as varchar(20)) as 'Key','Aemp1' as TableName, 'Collect' as DCFlag ,'' as UpdatedFlag ,isnull((cast(pcs as nvarchar(20))+' ' +ISNULL(UomCode,'')),'') as PcsUom ," +
                         "  PickupDateTime as TimeFrom  ,  CollectFromName as DeliveryToName, CollectFromAddress1 as DeliveryToAddress1 , " +
                         "  CollectFromAddress2 as DeliveryToAddress2 ,CollectFromAddress3 as DeliveryToAddress3 ,CollectFromAddress4 as DeliveryToAddress4 , " +
                         "  GrossWeight as Weight,Volume ,(Select ISNULL( CommodityDescription,'') From Aiaw1 Where Aiaw1.JobNo=Aemp1.JobNo )  as DeliveryInstruction1, (Select ISNULL( CommodityDescription01,'') From Aiaw1 Where Aiaw1.JobNo=Aemp1.JobNo ) as DeliveryInstruction2, " +
@@ -89,7 +89,7 @@ namespace WebApi.ServiceModel.TMS
                         "  DriverCode as  DriverCode , CONVERT(varchar(20),CollectDateTime ,112) as FilterTime , " +
                         "  (Select ISNULL(consigneetelephone,'')  From Sibl1 Where  Sibl1.JobNo = Sido1.JobNo) AS  PhoneNumber ," +
                         "  ISNULL(SignBy,'') AS SignBy " +
-                        "  from Sido1 " + strSido1Where + "";
+                        "  from Sido1 " + strSido1Where + ") as A order by  TimeFrom Desc";
 
              Result = db.Select<Aemp1_Aido1>(strSql);
 
